@@ -63,18 +63,34 @@ app.post('/login', function(req,res){
 
 
 
+function WordResult(name, id, url, location) {
+    this.name = name;
+    this.id = id;
+    this.url = url;
+    this.location = location;
+}
+
+function Keyword(name, result, wordResultArray){
+    this.result = result;
+    this.name = name;
+    this.wordResultArray = wordResultArray;
+}
+
+function Results(keywords){
+    this.keywords = keywords;
+}
+
 
 /**
  * test: String of text body to analyse
  **/
 app.post('/', function(req, res){
+
     console.log("Got to the post");
     console.log(req.body.inputText);
     var body = req.body.inputText;
 
-
     let url = baseURL + '/document/analyze';
-    console.log(url);
 
     var options = {
         url: url,
@@ -87,35 +103,40 @@ app.post('/', function(req, res){
 
     var words;
     function callback(error, response, body) {
-
-        //console.log(body);
-        console.log(response.body);
-        console.log(error);
+        var keywords = [];
         words = response.body;
-
-
         words = JSON.parse(words);
         console.log(words);
-
-
-
+        var keywords = [];
         for (var key in words) {
             // check if the property/key is defined in the object itself, not in parent
             if (words.hasOwnProperty(key)) {
-                //console.log(key, words[key]);
-                console.log(key);
+                console.log("current key: " + key);
                 console.log(words[key]);
+                //Check if we got something back for the word
                 if(words[key].length > 0){
-                    console.log(words[key].length);
-                    console.log("Name: " + words[key][0].name);
+                    var wordResults = [];
+                    wordResults.app
+                    for (var data in words[key]){
+                        console.log("Current object: ");
+                        console.log(words[key][data]);
+                        console.log("Name: " + words[key][data].name); //Ask what the word was that was found
+                        let wordResult = new WordResult(words[key][data].name, words[key][data].id, words[key][data].url, 0);
+                        wordResults.push(wordResult);
+                    }
+                    let keyword = new Keyword(key, true, wordResults);
+                    keywords.push(keyword);
+                }else{
+                    let keyword = new Keyword(key, false, null);
+                    keywords.push(keyword);
                 }
-
-
             }
         }
 
+        var results = new Results(keywords);
 
-        res.send(words);
+        results = JSON.stringify(results);
+        res.send(results);
     }
 
     request(options, callback);
