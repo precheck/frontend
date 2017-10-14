@@ -1,4 +1,3 @@
-
 //Imports
 let express = require('express'),
     app = express();
@@ -10,10 +9,11 @@ const util = require('util');
 var bodyParser = require('body-parser');
 var request = require('request');
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-//let baseURL = "https://testurl";
+
+let baseURL = 'http://ec2-34-215-123-101.us-west-2.compute.amazonaws.com/api';
 
 
 //app.configure(function(){
@@ -39,36 +39,87 @@ app.get('/', function(req, res){
     // res.render('main', {
     //     message : "Hello World"
     // });
-
-
     res.send("Hello World");
 
     console.log("A user has arrived at the main page");
 });
 
 
-/**
-* test: String of text body to analyse
-**/
+app.post('/register', function(req,res){
+    console.log("Attempting to log in");
+    let username = req.body.username;
+    let password = req.body.password;
+    let org = req.body.org;
 
+});
+
+app.post('/login', function(req,res){
+    console.log("Attempting to log in");
+    let username = req.body.username;
+    let password = req.body.password;
+});
+
+//http://ec2-34-215-123-101.us-west-2.compute.amazonaws.com/oauth/token
+
+
+
+
+/**
+ * test: String of text body to analyse
+ **/
 app.post('/', function(req, res){
     console.log("Got to the post");
-    console.log(req.body.text);
-
-    // request.post(
-    //     'http://www.yoursite.com/formpage',
-    //     { json:
-    //         { key: 'value' }
-    //         },
-    //     function (error, response, body) {
-    //         if (!error && response.statusCode == 200) {
-    //             console.log(body)
-    //         }
-    //     }
-    // );
+    console.log(req.body.inputText);
+    var body = req.body.inputText;
 
 
-    res.send('POST request to the homepage');
+    let url = baseURL + '/document/analyze';
+    console.log(url);
+
+    var options = {
+        url: url,
+        method:'post',
+        headers: {
+            'Authorization':'Bearer ' + '0d54b1f6-1186-46a0-a38c-35b0df61f189'
+        },
+        body:body
+    };
+
+    var words;
+    function callback(error, response, body) {
+
+        //console.log(body);
+        console.log(response.body);
+        console.log(error);
+        words = response.body;
+
+
+        words = JSON.parse(words);
+        console.log(words);
+
+
+
+        for (var key in words) {
+            // check if the property/key is defined in the object itself, not in parent
+            if (words.hasOwnProperty(key)) {
+                //console.log(key, words[key]);
+                console.log(key);
+                console.log(words[key]);
+                if(words[key].length > 0){
+                    console.log(words[key].length);
+                    console.log("Name: " + words[key][0].name);
+                }
+
+
+            }
+        }
+
+
+        res.send(words);
+    }
+
+    request(options, callback);
+
 });
 
 
