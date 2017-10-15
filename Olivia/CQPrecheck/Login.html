@@ -1,0 +1,55 @@
+<!Doctype html>
+<html>
+
+<head>
+  <title>Precheck</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <!-- Optional Bootstrap theme -->
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/Login.css">
+    <link rel="stylesheet" href= "toastr-master/build/toastr.min.css">
+</head>
+
+<body class = "landingpage">
+<script>document.body.landingpage += ' fade-out';</script>
+  <h1 class = "bg-inverse text-white">PreCheck</h1>
+  <div class="vertical-center" id = "logFade" >
+  <div class="container offmargins ">
+    <div class=" ">
+      <div class="well text-center col-xs-4 col-md-offset-4">
+        <h1 class = "signup">Login</h1>
+        <label for="usr">Username:</label>
+        <input class = "form-control"></input>
+        <label for="pwd">Password:</label>
+        <input type ="password" class = "form-control"></input>
+        <br>
+        <button id = "success" class = "btn btn-secondary btn-lg"type = "submit">Login</button>
+        <button onclick="window.location.href='Signup.html'"class = "btn btn-secondary btn-lg">Register</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/jquery-3.2.1.min.js"></script>
+
+<script type = "text/javascript">
+  $(function() {
+    $('body').removeClass('fade-out');
+  });
+
+  $(document).on('click', '#success', function(evt){
+    evt.preventDefault();
+    //if not valid
+    toastr.error("Invalid username or password");
+    //toastr.options.hideEasing = 'easeInBack';
+    //if valid
+    toastr.success("Success!");
+  });
+
+
+  </script>
+
+  <script src = "toastr-master/build/toastr.min.js"></script>
+
+  <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
