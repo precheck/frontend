@@ -6,7 +6,7 @@ var request = require('request');
 var http = require('http');
 var https = require('https');
 const util = require('util');
-var bodyParser = require('body-parser');
+//var bodyParser = require('body-parser');
 var request = require('request');
 var querystring = require('querystring');
 var bb = require('express-busboy');
@@ -14,13 +14,12 @@ var fs = require('fs');
 
 bb.extend(app, {
     upload: true,
-
 });
 
 var bearer;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 String.prototype.splice = function(idx, rem, str) {
     return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
@@ -297,7 +296,7 @@ app.post('/upload', function(req, res){
         url: url,
         method:'post',
         headers:{
-            'Authorization':'Bearer ' + bearer;
+            'Authorization':'Bearer ' + bearer
         },
         formData:{
             file: fs.createReadStream(req.files.file.file),
@@ -306,14 +305,13 @@ app.post('/upload', function(req, res){
     };
     function callback(error, response, body) {
         console.log(error);
-        console.log(body);
-        var data = JSON.parse(body);
+        //console.log(response.);
         //console.log(data.access_token);
 
         //authToken = data.access_token;
 
 
-        res.redirect('/home');
+        res.redirect('home');
 
         //res.send(data.access_token);
     }
