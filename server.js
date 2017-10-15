@@ -18,9 +18,6 @@ bb.extend(app, {
 
 var bearer;
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-
 String.prototype.splice = function(idx, rem, str) {
     return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
 };
@@ -51,16 +48,6 @@ app.set('twig options', {
 });
 
 
-//Landing Page
-// app.get('/', function(req, res){
-//     // res.render('main', {
-//     //     message : "Hello World"
-//     // });
-//     res.send("Hello World");
-//
-//     console.log("A user has arrived at the main page");
-// });
-
 
 app.get('/register', function(req,res){
     console.log("Attempting to log in");
@@ -84,17 +71,6 @@ app.post('/login', function(req,res){
     let username = req.body.username;
     let password = req.body.password;
 
-    // getAuthToken
-    //     .then(function (authToken) {
-    //         console.log("auth Token: " + authToken);
-    //         console.log(authToken);
-    //         res.send(authToken);
-    //     })
-    //     .catch(function (error) {
-    //         console.log(error.message);
-    //         res.send(error.message);
-    //     });
-
     console.log("Getting the auth token");
     console.log("Username: " + username + "Password: " + password);
     let url = 'http://web-precheck:123456@ec2-34-215-123-101.us-west-2.compute.amazonaws.com/oauth/token';
@@ -117,14 +93,10 @@ app.post('/login', function(req,res){
         console.log(data.access_token);
 
         authToken = data.access_token;
-        // res.render('home',{
-        //     auth:data.access_token
-        // });
 
         bearer = authToken;
         res.redirect('/home');
 
-        //res.send(data.access_token);
     }
 
     request(options, callback);
@@ -233,14 +205,6 @@ app.post('/getWords', function(req, res){
         article = article.nl2br();
         console.log("got the article" + article);
 
-        //res.setHeader('Content-Type', 'application/json');
-
-
-        // res.render('parsed',{
-        //     article:article
-        // });
-
-        //res.send(JSON.stringify(results));
         res.redirect('/parsed');
 
 
@@ -305,15 +269,9 @@ app.post('/upload', function(req, res){
     };
     function callback(error, response, body) {
         console.log(error);
-        //console.log(response.);
-        //console.log(data.access_token);
-
-        //authToken = data.access_token;
-
 
         res.redirect('home');
 
-        //res.send(data.access_token);
     }
 
     request(options, callback);
@@ -339,14 +297,6 @@ app.post('/newEntity', function(req, res){
     function callback(error, response, body) {
         console.log(error);
         console.log(body);
-        //console.log(data.access_token);
-
-        //authToken = data.access_token;
-
-
-        //res.redirect('home');
-
-        //res.send(data.access_token);
     }
 
     request(options, callback);
