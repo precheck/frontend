@@ -1,6 +1,7 @@
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 
+
 $('.dropbtn').click(function dropToggle() {
     $(this).parent().children()[1].classList.toggle('show');
 });
@@ -10,6 +11,15 @@ $('.result').click(function setResult(){
   var url = $(this).children('.url').text();
   var word = $(this).closest('.dropdown').ignore('div').text();
   $(this).closest('.dropdown').replaceWith('<a class="alink" href=' + url + '>' + word + '</a>');
+
+  $.ajax({
+  type: "POST",
+  url: '/newEntity',
+  data: {word: word, url: url},
+  }).done(function (data){
+    console.log(data);
+  });
+
 });
 
 //watching for custom entry
@@ -18,6 +28,14 @@ $('.custom').click(function enterCustomURL(){
   var word = $(this).closest('.dropdown').ignore('div').text();
   var pop = prompt("Enter a URL", "https://www.Google.com");
   $(this).closest('.dropdown').replaceWith('<a class="alink" href = ' + pop + '>' + word + '</a>');
+
+  $.ajax({
+  type: "POST",
+  url: '/newEntity',
+  data: {word: word, url: url},
+  }).done(function (data){
+    console.log(data);
+  });
 });
 
 // Close the dropdown if the user clicks outside of it
