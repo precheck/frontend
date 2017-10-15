@@ -228,7 +228,7 @@ app.get('/microsoft', function(req, res){
             client_id: "6888383f-261f-4a88-9cbf-e05324d0c411",
             scope: "user.read mail.send",
             code: authToken,
-            redirect_uri: "http://localhost:15000/microsoft",
+            redirect_uri: "https://cqprecheck.com/microsoft",
             grant_type: "authorization_code",
             client_secret: "mf0CdCON42nqhJJ0S1XT50Y"
         }
@@ -254,6 +254,8 @@ app.post('/upload', function(req, res){
 
     console.log(req.body);
     console.log(req.files);
+
+
 
     let url = 'http://web-precheck:123456@cqprecheck.com/api/document/email';
     var options = {
