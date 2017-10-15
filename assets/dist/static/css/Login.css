@@ -6,6 +6,11 @@ body{
 
 }
 
+img, .logo{
+  width: 10%;
+  height: 10%;
+  margin: 10px 0px 0px 10px;
+}
 
 html, body{
     height:100%; /* important to vertically align the container */
@@ -21,7 +26,7 @@ html, body{
 }*/
 
 .offmargins{
-  margin: 200px 200px 0px 150px;
+  margin: 100px 100px 100px 100px;
 }
 
 .logoutColor{
