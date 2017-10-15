@@ -9,7 +9,7 @@ $('.dropbtn').click(function dropToggle() {
 $('.result').click(function setResult(){
   var url = $(this).children('.url').text();
   var word = $(this).closest('.dropdown').ignore('div').text();
-  $(this).closest('.dropdown').replaceWith('<a href=' + url + '>' + word + '</a>');
+  $(this).closest('.dropdown').replaceWith('<a class="alink" href=' + url + '>' + word + '</a>');
 });
 
 //watching for custom entry
@@ -23,7 +23,6 @@ $('.custom').click(function enterCustomURL(){
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(event) {
   if (!event.target.matches('.dropbtn')) {
-
     var dropdowns = document.getElementsByClassName("dropdown-content");
     var i;
     for (i = 0; i < dropdowns.length; i++) {
