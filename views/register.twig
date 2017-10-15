@@ -1,0 +1,56 @@
+<!Doctype html>
+<html>
+
+<head>
+    <title>Precheck</title>
+    <link rel="stylesheet" type="text/css" href="/dist/static/css/bootstrap.min.css">
+    <!-- Optional Bootstrap theme -->
+    <link rel="stylesheet" href="/dist/static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/dist/static/css/Login.css">
+    <link rel="stylesheet" href= "/dist/static/toastr-master/build/toastr.min.css">
+</head>
+
+<body class = "landingpage">
+<h1 class = "bg-inverse ">PreCheck</h1>
+<div class="vertical-center" >
+    <div class="container offmargins ">
+        <div class=" ">
+            <div class="well text-center col-xs-4 col-md-offset-4">
+                <h1 class = "signup ">Signup</h1>
+
+
+                <form id="registerform" method="post" action="login">
+                    <label for="username">Username:</label>
+                    <input class = "form-control" name = "username"></input>
+                    <label for="password" name = "password">Password:</label>
+                    <input type ="password" class = "form-control"></input>
+                    <br>
+                    <input type ="submit" id = "success" class = "btn btn-secondary btn-lg" value = "Submit"></input>
+
+                    <button onclick="window.location.href='Login.html'" class = "btn btn-secondary btn-lg">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id = "alert" class = "hide"></div>
+<script src="/dist/static/js/jquery-3.2.1.min.js"></script>
+
+<script type = "text/javascript">
+
+
+    <script type = "text/javascript">
+        $(document).on('click', '#success', function(evt){
+            evt.preventDefault();
+            if(docum)
+                toastr.error("Invalid input");
+            //if valid
+            toastr.success("Success!");
+        });
+
+</script>
+<script src = "/dist/static/toastr-master/build/toastr.min.js"></script>
+
+<script src="/dist/static/js/bootstrap.min.js"></script>
+</body>
+</html>
