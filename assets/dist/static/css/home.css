@@ -1,0 +1,13 @@
+#form{
+  text-align: center;
+  width: 80%;
+  margin: auto;
+}
+#submitBtn{
+  position: relative;
+  margin-top: 20px;
+}
+#textAreaDiv{
+  position: relative;
+  display: block;
+}

@@ -1,0 +1,64 @@
+<!Doctype html>
+<html>
+
+<head>
+    <title>Precheck</title>
+    <link rel="stylesheet" type="text/css" href="/dist/static/css/bootstrap.css">
+    <!-- Optional Bootstrap theme -->
+    <link rel="stylesheet" href="/dist/static/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="/dist/static/css/Login.css">
+    <link rel="stylesheet" href= "/dist/static/toastr-master/build/toastr.css">
+</head>
+
+<body class = "landingpage">
+<script>document.body.landingpage += ' fade-out';</script>
+
+<h1 class = "bg-inverse text-white">PreCheck</h1>
+<div class="vertical-center" id = "logFade" >
+    <div class="container offmargins ">
+        <div>
+            <div class="well text-center col-xs-4 col-md-offset-4">
+                <form action="/login" method="post">
+                    <h1 class = "signup">Login</h1>
+                    <label for="usr">Username:</label>
+                    <input type="text" class="form-control" name="username">
+                    <br>
+                    <label for="pwd">Password:</label>
+                    <input type="password" class="form-control" name="password">
+                    <br><br>
+                    <input type="submit" value="Login" class="btn btn-secondary btn-lg">
+                </form>
+
+                {#<br>#}
+                {#<button id = "success" class = "btn btn-secondary btn-lg"type = "submit">Login</button>#}
+                {#<button onclick="window.location.href='Signup.html'"class = "btn btn-secondary btn-lg">Register</button>#}
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script src="/dist/static/js/jquery-3.2.1.min.js"></script>
+
+<script type = "text/javascript">
+    $(function() {
+        $('body').removeClass('fade-out');
+    });
+
+    $(document).on('click', '#success', function(evt){
+        evt.preventDefault();
+        //if not valid
+        toastr.error("Invalid username or password");
+        //toastr.options.hideEasing = 'easeInBack';
+        //if valid
+        toastr.success("Success!");
+    });
+
+
+</script>
+
+<script src = "/dist/static/toastr-master/build/toastr.min.js"></script>
+
+<script src="/dist/static/js/bootstrap.min.js"></script>
+</body>
+</html>

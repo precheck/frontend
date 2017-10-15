@@ -35,14 +35,14 @@ app.set('twig options', {
 
 
 //Landing Page
-app.get('/', function(req, res){
-    // res.render('main', {
-    //     message : "Hello World"
-    // });
-    res.send("Hello World");
-
-    console.log("A user has arrived at the main page");
-});
+// app.get('/', function(req, res){
+//     // res.render('main', {
+//     //     message : "Hello World"
+//     // });
+//     res.send("Hello World");
+//
+//     console.log("A user has arrived at the main page");
+// });
 
 
 app.post('/register', function(req,res){
@@ -53,11 +53,112 @@ app.post('/register', function(req,res){
 
 });
 
+app.get('/', function(req,res){
+   res.render('login',{});
+});
+
+var authToken;
+
 app.post('/login', function(req,res){
     console.log("Attempting to log in");
     let username = req.body.username;
     let password = req.body.password;
+
+    // getAuthToken
+    //     .then(function (authToken) {
+    //         console.log("auth Token: " + authToken);
+    //         console.log(authToken);
+    //         res.send(authToken);
+    //     })
+    //     .catch(function (error) {
+    //         console.log(error.message);
+    //         res.send(error.message);
+    //     });
+
+    console.log("Getting the auth token");
+    console.log("Username: " + username + "Password: " + password);
+    let url = 'http://web-precheck:123456@ec2-34-215-123-101.us-west-2.compute.amazonaws.com/oauth/token';
+    var options = {
+        url: url,
+        method:'post',
+        form: {
+            password: password,
+            username: username,
+            grant_type: 'password',
+            scope: 'write',
+            client_secret: '123456',
+            client_id: 'web-precheck'
+        }
+    };
+    function callback(error, response, body) {
+        console.log(error);
+        console.log(body);
+        var data = JSON.parse(body);
+        console.log(data.access_token);
+
+        authToken = data.access_token;
+        // res.render('home',{
+        //     auth:data.access_token
+        // });
+
+        res.redirect('/home');
+
+        //res.send(data.access_token);
+    }
+
+    request(options, callback);
+
 });
+
+app.get('/home',function(req, res){
+    res.render('home',{
+        auth:authToken
+    });
+
+    authToken = undefined;
+});
+
+
+// var getAuthToken = new Promise(
+//     function (resolve, reject) {
+//             if(username == undefined || password == undefined){
+//                 console.log("Tried to run the promise");
+//                 return;
+//             }
+//             console.log("Getting the auth token");
+//             console.log("Username: " + username + "Password: " + password);
+//             let url = 'http://web-precheck:123456@ec2-34-215-123-101.us-west-2.compute.amazonaws.com/oauth/token';
+//             var options = {
+//                 url: url,
+//                 method:'post',
+//                 form: {
+//                     password: 'password',
+//                     username: 'michael',
+//                     grant_type: 'password',
+//                     scope: 'write',
+//                     client_secret: '123456',
+//                     client_id: 'web-precheck'
+//                 }
+//             };
+//             function callback(error, response, body) {
+//                 console.log(error);
+//                 console.log(body);
+//                 var data = JSON.parse(body);
+//                 console.log(data.access_token);
+//                 if(!data.error){
+//                     resolve(data.access_token);
+//                 }
+//                 var error = new Error("Error getting auth token");
+//                 reject(error);
+//
+//
+//             }
+//
+//             request(options, callback);
+//     }
+// );
+
+
 
 //http://ec2-34-215-123-101.us-west-2.compute.amazonaws.com/oauth/token
 
@@ -70,9 +171,10 @@ function WordResult(name, id, url, location) {
     this.location = location;
 }
 
-function Keyword(name, result, wordResultArray){
+function Keyword(name, result,locations, wordResultArray){
     this.result = result;
     this.name = name;
+    this.locations = locations;
     this.wordResultArray = wordResultArray;
 }
 
@@ -84,11 +186,18 @@ function Results(keywords){
 /**
  * test: String of text body to analyse
  **/
-app.post('/', function(req, res){
+app.post('/getWords', function(req, res){
 
     console.log("Got to the post");
-    console.log(req.body.inputText);
+    console.log(req.body);
     var body = req.body.inputText;
+
+    console.log("body: " + body);
+
+    if (body == undefined){
+        res.send("There was an error parsing");
+        return;
+    }
 
     let url = baseURL + '/document/analyze';
 
@@ -96,7 +205,7 @@ app.post('/', function(req, res){
         url: url,
         method:'post',
         headers: {
-            'Authorization':'Bearer ' + '0d54b1f6-1186-46a0-a38c-35b0df61f189'
+            'Authorization':'Bearer b7273565-d7db-4d5f-b766-77c486e13ab0'
         },
         body:body
     };
@@ -114,17 +223,17 @@ app.post('/', function(req, res){
                 console.log("current key: " + key);
                 console.log(words[key]);
                 //Check if we got something back for the word
-                if(words[key].length > 0){
+                if(words[key].entities.length > 0){
                     var wordResults = [];
                     wordResults.app
-                    for (var data in words[key]){
+                    for (var data in words[key].entities){
                         console.log("Current object: ");
-                        console.log(words[key][data]);
-                        console.log("Name: " + words[key][data].name); //Ask what the word was that was found
-                        let wordResult = new WordResult(words[key][data].name, words[key][data].id, words[key][data].url, 0);
+                        console.log(words[key].entities[data]);
+                        console.log("Name: " + words[key].entities[data].name); //Ask what the word was that was found
+                        let wordResult = new WordResult(words[key].entities[data].name, words[key].entities[data].id, words[key].entities[data].url, 0);
                         wordResults.push(wordResult);
                     }
-                    let keyword = new Keyword(key, true, wordResults);
+                    let keyword = new Keyword(key, true,words[key].locations, wordResults);
                     keywords.push(keyword);
                 }else{
                     let keyword = new Keyword(key, false, null);
@@ -134,9 +243,9 @@ app.post('/', function(req, res){
         }
 
         var results = new Results(keywords);
-
-        results = JSON.stringify(results);
-        res.send(results);
+        
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(results));
     }
 
     request(options, callback);
@@ -145,15 +254,3 @@ app.post('/', function(req, res){
 
 
 app.listen(15000);
-
-
-
-
-
-
-
-
-
-
-
-
