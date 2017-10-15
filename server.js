@@ -320,6 +320,39 @@ app.post('/upload', function(req, res){
 });
 
 
+app.post('/newEntity', function(req, res){
+    console.log(req.body);
+    var entity = req.body;
+
+    //entity = JSON.stringify(entity);
+
+
+    var options = {
+        url: "https://cqprecheck.com/api/entity",
+        method:'post',
+        headers:{
+            'Authorization':'Bearer ' + bearer
+        },
+        json: true,
+        body:entity
+    };
+    function callback(error, response, body) {
+        console.log(error);
+        console.log(body);
+        //console.log(data.access_token);
+
+        //authToken = data.access_token;
+
+
+        //res.redirect('home');
+
+        //res.send(data.access_token);
+    }
+
+    request(options, callback);
+
+
+});
 
 app.get('/parsed',function(req, res){
     res.render('parsed',{

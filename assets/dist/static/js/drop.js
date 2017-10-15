@@ -21,7 +21,7 @@ $('.result').click(function setResult(){
   $.ajax({
   type: "POST",
   url: '/newEntity',
-  data: {word: word, url: url},
+  data: {name: word, url: url},
   }).done(function (data){
     console.log(data);
   });
@@ -38,7 +38,7 @@ $('.custom').click(function enterCustomURL(){
   $.ajax({
   type: "POST",
   url: '/newEntity',
-  data: {word: word, url: pop},
+  data: {name: word, url: pop},
   }).done(function (data){
     console.log(data);
   });
