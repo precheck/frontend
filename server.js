@@ -8,12 +8,17 @@ var https = require('https');
 const util = require('util');
 var bodyParser = require('body-parser');
 var request = require('request');
+var querystring = require('querystring');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 String.prototype.splice = function(idx, rem, str) {
     return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
+};
+
+String.prototype.nl2br = function() {
+    return this.replace(/\n/g, "<br />");
 };
 
 
@@ -49,11 +54,11 @@ app.set('twig options', {
 // });
 
 
-app.post('/register', function(req,res){
+app.get('/register', function(req,res){
     console.log("Attempting to log in");
     let username = req.body.username;
     let password = req.body.password;
-    let org = req.body.org;
+    //let org = req.body.org;
 
 });
 
@@ -212,6 +217,7 @@ app.post('/getWords', function(req, res){
         console.log(results.keywords[0].locations);
 
         article = parseArticle(results, inputBody);
+        article = article.nl2br();
         console.log("got the article" + article);
 
         //res.setHeader('Content-Type', 'application/json');
@@ -230,6 +236,49 @@ app.post('/getWords', function(req, res){
     request(options, callback);
 
 });
+
+
+app.get('/microsoft', function(req, res){
+    let authToken = req.query.code;
+    console.log(authToken);
+
+    var options = {
+        url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        method:'post',
+        form: {
+            client_id: "6888383f-261f-4a88-9cbf-e05324d0c411",
+            scope: "user.read mail.send",
+            code: authToken,
+            redirect_uri: "http://localhost:15000/microsoft",
+            grant_type: "authorization_code",
+            client_secret: "mf0CdCON42nqhJJ0S1XT50Y"
+        }
+    };
+
+
+    function callback(error, response, body) {
+        console.log(error);
+        console.log(body.access_token);
+
+
+        //var data = JSON.parse(body);
+        //console.log(data.access_token);
+
+        //authToken = data.access_token;
+        // res.render('home',{
+        //     auth:data.access_token
+        // });
+
+        //res.redirect('/home');
+
+        //res.send(data.access_token);
+    }
+
+    request(options, callback);
+
+
+});
+
 
 
 app.get('/parsed',function(req, res){
@@ -253,6 +302,10 @@ function parseArticle(keywords, article){
             var string = " " + keyword.name;
             var wordLoc = article.search(string);
             let letter = article.charAt(wordLoc + 1);
+            if(wordLoc == -1){
+                keyword.locations.pop();
+                break;
+            }
             console.log("Found: " + letter + " at: " + wordLoc);
             var preString = "<div class='dropdown found'><span class='dropbtn'>";
             var postString = buildPostString(keyword);
