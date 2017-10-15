@@ -157,7 +157,7 @@ app.post('/getWords', function(req, res){
         url: url,
         method:'post',
         headers: {
-            'Authorization':'Bearer ' + bearer
+            'Authorization':'Bearer ' + '2b4b6377-6179-49b8-8f59-a2606a1876ad'
         },
         body:inputBody
     };
@@ -262,7 +262,7 @@ app.post('/upload', function(req, res){
         url: url,
         method:'post',
         headers:{
-            'Authorization':'Bearer ' + bearer
+            'Authorization':'Bearer ' + '2b4b6377-6179-49b8-8f59-a2606a1876ad'
         },
         formData:{
             file: fs.createReadStream(req.files.file.file),
@@ -291,7 +291,7 @@ app.post('/newEntity', function(req, res){
         url: "https://cqprecheck.com/api/entity",
         method:'post',
         headers:{
-            'Authorization':'Bearer ' + bearer
+            'Authorization':'Bearer ' + '2b4b6377-6179-49b8-8f59-a2606a1876ad'
         },
         json: true,
         body:entity
