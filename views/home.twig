@@ -41,10 +41,10 @@
     <p class="uploadMS">OR</p>
     <br>
     <br>
-    <a class="uploadMS btn btn-primary" href="https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=6888383f-261f-4a88-9cbf-e05324d0c411&response_type=code&redirect_uri=https%3A%2F%2cqprecheck.com%2Fmicrosoft&response_mode=query&scope=offline_access%20user.read%20mail.send&state=12345">File Upload <img src='/dist/static/128px-Microsoft_logo_(2012).png' alt="microsoft" height="15" width="15"></a>
+    <a class="uploadMS btn btn-primary" href="https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=6888383f-261f-4a88-9cbf-e05324d0c411&response_type=code&redirect_uri=https://cqprecheck.com/microsoft&response_mode=query&scope=offline_access%20user.read%20mail.send&state=12345">File Upload <img src='/dist/static/128px-Microsoft_logo_(2012).png' alt="microsoft" height="15" width="15"></a>
 
   {% if microsoftToken != undefined %}
-      <form action="http://localhost:15000/upload" method="post" enctype="multipart/form-data">
+      <form action="https://cqprecheck.com/upload" method="post" enctype="multipart/form-data">
           <input type="file" name="file" id="fileID"><br>
           <input type="hidden" name="auth" value="{{ microsoftToken }}"><br>
           <input type="submit" value="Submit">
