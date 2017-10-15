@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -34,13 +35,21 @@
         {#<button id="submitBtn" type="submit" class="btn btn-primary">Submit</button>#}
         <input type="submit" class="btn btn-primary" id="submitBtn">
     </div>
-
 </form>
 
-<a href="https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=6888383f-261f-4a88-9cbf-e05324d0c411&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A15000%2Fmicrosoft&response_mode=query&scope=offline_access%20user.read%20mail.send&state=12345">Login with Microsoft</a>
-
-
+  <a class="uploadMS btn btn-primary" href="https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=6888383f-261f-4a88-9cbf-e05324d0c411&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A15000%2Fmicrosoft&response_mode=query&scope=offline_access%20user.read%20mail.send&state=12345">File Upload <img src='/dist/static/128px-Microsoft_logo_(2012).png' alt="microsoft" height="15" width="15"></a>
+  <input id='fileid' type='file' hidden/>
+  <input id='uploadButton' type='button' class="btn btn-primary" value='Upload .docx' />
 
 </body>
+<script type="text/javascript">
+  document.getElementById('fileid').style.display = 'none';
+  document.getElementById('uploadButton').style.display = 'none';
+  //document.getElementById('uploadButton').addEventListener('click', openDialog);
+
+  function openDialog() {
+    document.getElementById('fileid').click();
+  }
+</script>
 <script src="/dist/static/js/entitySearch.js"></script>
 </html>
