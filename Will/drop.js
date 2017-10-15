@@ -1,11 +1,9 @@
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 
-$('.dropbtn').on("click", dropToggle);
-
-function dropToggle() {
-    document.getElementById("myDropdown").classList.toggle("show");
-}
+$('.dropbtn').click(function dropToggle() {
+    $(this).parent().children()[1].classList.toggle('show');
+});
 
 //watch fot the results to be clicked
 $('.result').click(function setResult(){
