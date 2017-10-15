@@ -1,0 +1,82 @@
+<!Doctype html>
+<html>
+
+<head>
+    <title>Precheck</title>
+    <link rel="stylesheet" type="text/css" href="/dist/static/css/bootstrap.css">
+    <!-- Optional Bootstrap theme -->
+    <link rel="stylesheet" href="/dist/static/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="/dist/static/css/Login.css">
+    <link rel="stylesheet" href= "/dist/static/toastr-master/build/toastr.css">
+    <script src="http://www.google.com/jsapi"></script>
+    <script>
+       google.load("jquery", "1");
+       google.load("jqueryui", "1");
+    </script>
+    <script>
+      $(document).ready(function()
+      {
+       $('div').hide().fadeIn(500);
+      });
+    </script>
+</head>
+
+<body class = "loginBody">
+<script>document.body.landingpage += ' fade-out';</script>
+<img class = "logo" src = "/dist/static/cqpwhite.png"></img>
+<div class="vertical-center" id = "logFade" >
+    <div class = "offmargins">
+
+    </div>
+    <div class="container ">
+        <div>
+            <div class="well text-center col-xs-4 col-md-offset-4 loginFade">
+                <form action="/login" method="post">
+                    <h1 class = "signup">Login</h1>
+                    <br>
+                    <label for="usr">Username:</label>
+                    <input type="text" class="form-control" name="username">
+                    <br>
+                    <label for="pwd">Password:</label>
+                    <input type="password" class="form-control" name="password">
+                    <br>
+                    <input type="submit" value="Login" class="test btn btn-block btn-sm ">
+                </form>
+                <br>
+                <button onclick="window.location.href='/register'"class = "test btn btn-block btn-sm ">Register</button>
+                {#<br>#}
+                {#<button id = "success" class = "btn btn-secondary btn-lg"type = "submit">Login</button>#}
+                {#<button onclick="window.location.href='Signup.html'"class = "btn btn-secondary btn-lg">Register</button>#}
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class = "footer">
+  <h4 class = copyright>&copy CQPrecheck Inc.</h4>
+</div>
+<script src="/dist/static/js/jquery-3.2.1.min.js"></script>
+
+<script type = "text/javascript">
+    $(function() {
+        $('body').removeClass('fade-out');
+    });
+
+    $(document).on('click', '#success', function(evt){
+        evt.preventDefault();
+        //if not valid
+        toastr.error("Invalid username or password");
+        //toastr.options.hideEasing = 'easeInBack';
+        //if valid
+        toastr.success("Success!");
+    });
+
+
+</script>
+
+<script src = "/dist/static/toastr-master/build/toastr.min.js"></script>
+
+<script src="/dist/static/js/bootstrap.min.js"></script>
+</body>
+</html>

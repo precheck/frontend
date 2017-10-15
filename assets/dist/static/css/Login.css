@@ -1,0 +1,59 @@
+.loginBody{
+  background-image: url("../skyline.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: black;
+}
+
+.loginBody::after{
+
+}
+
+
+img, .logo{
+  width: 10%;
+  height: 10%;
+  margin: 10px 0px 0px 10px;
+}
+.loginFade
+{
+  background: rgba(232,232,232,0.8);
+}
+
+
+html, body{
+    height:100%; /* important to vertically align the container */
+    margin:0;
+    padding:0;
+}
+
+/*.vertical-center {
+  min-height: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}*/
+
+.offmargins{
+  margin: 100px 100px 100px 100px;
+}
+
+.logoutColor{
+  color: white;
+}
+.test{
+  background-color: #377bb5;
+  color:white;
+}
+
+.copyright{
+  color: #e8e8e8;
+  text-align: right;
+}
+
+.footer{
+  position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 100%;
+}
