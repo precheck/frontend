@@ -17,7 +17,7 @@ $('.custom').click(function enterCustomURL(){
   var url = $(this).children('.url').text();
   var word = $(this).closest('.dropdown').ignore('div').text();
   var pop = prompt("Enter a URL", "https://www.Google.com");
-  $(this).closest('.dropdown').replaceWith('<a href = ' + pop + '>' + word + '</a>');
+  $(this).closest('.dropdown').replaceWith('<a class="alink" href = ' + pop + '>' + word + '</a>');
 });
 
 // Close the dropdown if the user clicks outside of it
