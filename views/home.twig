@@ -18,7 +18,7 @@
             <a class="navbar-brand" href="#">Precheck</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="Login.html">Logout</a></li>
+            <li><a href="/">Logout</a></li>
         </ul>
     </div>
 </nav>
@@ -29,7 +29,7 @@
     <div class="form-group">
         <label for="exampleTextarea">CQ Precheck</label>
             <div id="textAreaDiv">
-                <textarea class="form-control col-sm-2" id="textarea" rows="25" name ="inputText" form="form"></textarea>
+                <textarea class="form-control col-sm-2" id="textarea" rows="20" name ="inputText" form="form"></textarea>
             </div>
         {#<input type="hidden" value="{{ authToken }}">#}
         {#<button id="submitBtn" type="submit" class="btn btn-primary">Submit</button>#}
@@ -37,19 +37,32 @@
     </div>
 </form>
 
+  <p class="uploadMS">OR</p>
+  <br>
+  <br>
   <a class="uploadMS btn btn-primary" href="https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=6888383f-261f-4a88-9cbf-e05324d0c411&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A15000%2Fmicrosoft&response_mode=query&scope=offline_access%20user.read%20mail.send&state=12345">File Upload <img src='/dist/static/128px-Microsoft_logo_(2012).png' alt="microsoft" height="15" width="15"></a>
-  <input id='fileid' type='file' hidden/>
-  <input id='uploadButton' type='button' class="btn btn-primary" value='Upload .docx' />
 
+{% if microsoftToken != undefined %}
+    <form action="http://localhost:15000/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="fileID"><br>
+        <input type="hidden" name="auth" value="{{ microsoftToken }}"><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        document.getElementById('fileID').click();
+    </script>
+{% endif %}
 </body>
+
 <script type="text/javascript">
-  document.getElementById('fileid').style.display = 'none';
-  document.getElementById('uploadButton').style.display = 'none';
+  document.getElementById('fileID').style.display = 'none';
+//  document.getElementById('uploadButton').style.display = 'none';
   //document.getElementById('uploadButton').addEventListener('click', openDialog);
 
-  function openDialog() {
-    document.getElementById('fileid').click();
-  }
+//  function openDialog() {
+//    document.getElementById('fileID').click();
+//  }
 </script>
 <script src="/dist/static/js/entitySearch.js"></script>
 </html>

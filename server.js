@@ -9,6 +9,15 @@ const util = require('util');
 var bodyParser = require('body-parser');
 var request = require('request');
 var querystring = require('querystring');
+var bb = require('express-busboy');
+var fs = require('fs');
+
+bb.extend(app, {
+    upload: true,
+
+});
+
+var bearer;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -60,7 +69,7 @@ app.get('/register', function(req,res){
     let password = req.body.password;
 
     res.render('register',{});
-    
+
     //let org = req.body.org;
 
 });
@@ -113,6 +122,7 @@ app.post('/login', function(req,res){
         //     auth:data.access_token
         // });
 
+        bearer = authToken;
         res.redirect('/home');
 
         //res.send(data.access_token);
@@ -124,7 +134,8 @@ app.post('/login', function(req,res){
 
 app.get('/home',function(req, res){
     res.render('home',{
-        auth:authToken
+        auth:authToken,
+        microsoftToken:microsoftToken
     });
 
     authToken = undefined;
@@ -175,7 +186,7 @@ app.post('/getWords', function(req, res){
         url: url,
         method:'post',
         headers: {
-            'Authorization':'Bearer b7273565-d7db-4d5f-b766-77c486e13ab0'
+            'Authorization':'Bearer ' + bearer
         },
         body:inputBody
     };
@@ -240,6 +251,8 @@ app.post('/getWords', function(req, res){
 
 });
 
+var microsoftToken;
+
 
 app.get('/microsoft', function(req, res){
     let authToken = req.query.code;
@@ -256,30 +269,56 @@ app.get('/microsoft', function(req, res){
             grant_type: "authorization_code",
             client_secret: "mf0CdCON42nqhJJ0S1XT50Y"
         }
-    };
 
+
+    };
 
     function callback(error, response, body) {
         console.log(error);
+        console.log("*******************************************************");
+        console.log(body);
+        body = JSON.parse(body);
         console.log(body.access_token);
+        microsoftToken = body.access_token;
 
+        res.redirect('/home');
+    }
 
-        //var data = JSON.parse(body);
+    request(options, callback);
+});
+
+app.post('/upload', function(req, res){
+
+    console.log(req.body);
+    console.log(req.files);
+
+    let url = 'http://web-precheck:123456@cqprecheck.com/api/document/email';
+    var options = {
+        url: url,
+        method:'post',
+        headers:{
+            'Authorization':'Bearer ' + bearer;
+        },
+        formData:{
+            file: fs.createReadStream(req.files.file.file),
+            auth: req.body.auth
+        }
+    };
+    function callback(error, response, body) {
+        console.log(error);
+        console.log(body);
+        var data = JSON.parse(body);
         //console.log(data.access_token);
 
         //authToken = data.access_token;
-        // res.render('home',{
-        //     auth:data.access_token
-        // });
 
-        //res.redirect('/home');
+
+        res.redirect('/home');
 
         //res.send(data.access_token);
     }
 
     request(options, callback);
-
-
 });
 
 

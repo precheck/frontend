@@ -26,6 +26,7 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "express-busboy": "^6.0.1",
     "request": "^2.83.0",
     "twig": "^1.10.5"
   }
