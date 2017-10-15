@@ -1,6 +1,12 @@
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 
+$('.export').click(function sendExport() {
+  $('.container').hide();
+  $('.output').show();
+  $('.outputTag').show();
+  $('.output').text($('.container').html());
+});
 
 $('.dropbtn').click(function dropToggle() {
     $(this).parent().children()[1].classList.toggle('show');
@@ -56,4 +62,7 @@ $( document ).ready(function() {
   $.fn.ignore = function(sel){
     return this.clone().find(sel||">*").remove().end();
   };
+
+  $('.output').hide();
+  $('.outputTag').hide();
 });
