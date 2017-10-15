@@ -1,16 +1,25 @@
-body{
+.loginBody{
   background-image: url("../skyline.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-color: black;
+}
+
+.loginBody::after{
 
 }
+
 
 img, .logo{
   width: 10%;
   height: 10%;
   margin: 10px 0px 0px 10px;
 }
+.loginFade
+{
+  background: rgba(232,232,232,0.8);
+}
+
 
 html, body{
     height:100%; /* important to vertically align the container */
@@ -31,4 +40,8 @@ html, body{
 
 .logoutColor{
   color: white;
+}
+.test{
+  background-color: #377bb5;
+  color:white;
 }
