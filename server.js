@@ -58,6 +58,9 @@ app.get('/register', function(req,res){
     console.log("Attempting to log in");
     let username = req.body.username;
     let password = req.body.password;
+
+    res.render('register',{});
+    
     //let org = req.body.org;
 
 });
