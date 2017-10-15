@@ -12,6 +12,10 @@ var request = require('request');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+String.prototype.splice = function(idx, rem, str) {
+    return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
+};
+
 
 let baseURL = 'http://ec2-34-215-123-101.us-west-2.compute.amazonaws.com/api';
 
@@ -119,51 +123,6 @@ app.get('/home',function(req, res){
 });
 
 
-// var getAuthToken = new Promise(
-//     function (resolve, reject) {
-//             if(username == undefined || password == undefined){
-//                 console.log("Tried to run the promise");
-//                 return;
-//             }
-//             console.log("Getting the auth token");
-//             console.log("Username: " + username + "Password: " + password);
-//             let url = 'http://web-precheck:123456@ec2-34-215-123-101.us-west-2.compute.amazonaws.com/oauth/token';
-//             var options = {
-//                 url: url,
-//                 method:'post',
-//                 form: {
-//                     password: 'password',
-//                     username: 'michael',
-//                     grant_type: 'password',
-//                     scope: 'write',
-//                     client_secret: '123456',
-//                     client_id: 'web-precheck'
-//                 }
-//             };
-//             function callback(error, response, body) {
-//                 console.log(error);
-//                 console.log(body);
-//                 var data = JSON.parse(body);
-//                 console.log(data.access_token);
-//                 if(!data.error){
-//                     resolve(data.access_token);
-//                 }
-//                 var error = new Error("Error getting auth token");
-//                 reject(error);
-//
-//
-//             }
-//
-//             request(options, callback);
-//     }
-// );
-
-
-
-//http://ec2-34-215-123-101.us-west-2.compute.amazonaws.com/oauth/token
-
-
-
 function WordResult(name, id, url, location) {
     this.name = name;
     this.id = id;
@@ -174,7 +133,8 @@ function WordResult(name, id, url, location) {
 function Keyword(name, result,locations, wordResultArray){
     this.result = result;
     this.name = name;
-    this.locations = locations;
+    console.log("Inner locations: " + locations);
+    this.locations = JSON.parse(JSON.stringify(locations));
     this.wordResultArray = wordResultArray;
 }
 
@@ -183,6 +143,8 @@ function Results(keywords){
 }
 
 
+var article;
+
 /**
  * test: String of text body to analyse
  **/
@@ -190,11 +152,11 @@ app.post('/getWords', function(req, res){
 
     console.log("Got to the post");
     console.log(req.body);
-    var body = req.body.inputText;
+    var inputBody = req.body.inputText;
 
-    console.log("body: " + body);
+    console.log("inputBody: " + inputBody);
 
-    if (body == undefined){
+    if (inputBody == undefined){
         res.send("There was an error parsing");
         return;
     }
@@ -207,7 +169,7 @@ app.post('/getWords', function(req, res){
         headers: {
             'Authorization':'Bearer b7273565-d7db-4d5f-b766-77c486e13ab0'
         },
-        body:body
+        body:inputBody
     };
 
     var words;
@@ -225,7 +187,6 @@ app.post('/getWords', function(req, res){
                 //Check if we got something back for the word
                 if(words[key].entities.length > 0){
                     var wordResults = [];
-                    wordResults.app
                     for (var data in words[key].entities){
                         console.log("Current object: ");
                         console.log(words[key].entities[data]);
@@ -233,24 +194,93 @@ app.post('/getWords', function(req, res){
                         let wordResult = new WordResult(words[key].entities[data].name, words[key].entities[data].id, words[key].entities[data].url, 0);
                         wordResults.push(wordResult);
                     }
+                    console.log("Locations: " + words[key].locations);
                     let keyword = new Keyword(key, true,words[key].locations, wordResults);
+                    console.log("Keyword location: " + keyword.locations[0]);
                     keywords.push(keyword);
                 }else{
-                    let keyword = new Keyword(key, false, null);
+                    let keyword = new Keyword(key, false,words[key].locations, null);
+                    console.log("Locations: " + words[key].locations);
                     keywords.push(keyword);
                 }
             }
         }
 
         var results = new Results(keywords);
-        
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(results));
+
+        console.log(results);
+        console.log(results.keywords[0].locations);
+
+        article = parseArticle(results, inputBody);
+        console.log("got the article" + article);
+
+        //res.setHeader('Content-Type', 'application/json');
+
+
+        // res.render('parsed',{
+        //     article:article
+        // });
+
+        //res.send(JSON.stringify(results));
+        res.redirect('/parsed');
+
+
     }
 
     request(options, callback);
 
 });
+
+
+app.get('/parsed',function(req, res){
+    res.render('parsed',{
+        article:article
+    });
+
+    article = undefined;
+});
+
+function parseArticle(keywords, article){
+
+    console.log('-----------------------------------------------------------------');
+    console.log(article);
+    for(var item in keywords.keywords){
+        var keyword = keywords.keywords[item];
+        console.log(keyword.name);
+
+        while(keyword.locations.length > 0) {
+            console.log(keyword.locations.length);
+            var string = " " + keyword.name;
+            var wordLoc = article.search(string);
+            let letter = article.charAt(wordLoc + 1);
+            console.log("Found: " + letter + " at: " + wordLoc);
+            var preString = "<div class='dropdown found'><span class='dropbtn'>";
+            var postString = buildPostString(keyword);
+
+            article = article.splice(wordLoc+1 + keyword.name.length, 0, postString);
+            article = article.splice(wordLoc+1, 0, preString);
+
+            keyword.locations.pop();
+
+            //console.log(article);
+        }
+    }
+
+    console.log(article);
+
+    return article;
+}
+
+function buildPostString(keyword){
+    var buildString = "</span><div id='myDropdown' class='dropdown-content'>";
+    for(var result in keyword.wordResultArray){
+        buildString += "<a class='result'>" + keyword.name + "<div class='url'>" + keyword.wordResultArray[result].url + "</div></a>";
+    }
+    buildString += "<a class='custom'>Enter Custom URL</a></div></div>";
+
+    console.log(buildString);
+    return buildString;
+}
 
 
 app.listen(15000);
