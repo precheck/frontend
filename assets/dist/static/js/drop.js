@@ -32,7 +32,7 @@ $('.custom').click(function enterCustomURL(){
   $.ajax({
   type: "POST",
   url: '/newEntity',
-  data: {word: word, url: url},
+  data: {word: word, url: pop},
   }).done(function (data){
     console.log(data);
   });
