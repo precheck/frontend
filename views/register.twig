@@ -8,6 +8,17 @@
     <link rel="stylesheet" href="/dist/static/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/dist/static/css/Login.css">
     <link rel="stylesheet" href= "/dist/static/toastr-master/build/toastr.min.css">
+    <script src="http://www.google.com/jsapi"></script>
+    <script>
+       google.load("jquery", "1");
+       google.load("jqueryui", "1");
+    </script>
+    <script>
+      $(document).ready(function()
+      {
+       $('div').hide().fadeIn(500);
+      });
+    </script>
 </head>
 
 <body class = "loginBody">
@@ -20,7 +31,7 @@
         <div class=" ">
             <div class="well text-center col-xs-4 col-md-offset-4 loginFade">
                 <h1 class = "signup ">Signup</h1>
-
+                <br>
 
                 <form id="registerform" method="post" action="login">
                     <label for="username">Username:</label>
@@ -35,6 +46,9 @@
             </div>
         </div>
     </div>
+</div>
+<div class = "footer">
+  <h4 class = copyright>&copy CQPrecheck Inc.</h4>
 </div>
 <div id = "alert" class = "hide"></div>
 <script src="/dist/static/js/jquery-3.2.1.min.js"></script>
